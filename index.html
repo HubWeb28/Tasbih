@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ultimate Islamic Tasbeeh & Tools Suite</title>
+    
+    <!-- Google Fonts: English UI + Authentic Arabic & Nastaliq Urdu -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #091210;
+            --surface: #12211e;
+            --card: #182b27;
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --gold: #f59e0b;
+            --danger: #ef4444;
+            --text-light: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border: #23403a;
+            --font-en: 'Plus Jakarta Sans', sans-serif;
+            --font-ar: 'Amiri', serif;
+            --font-ur: 'Noto Nastaliq Urdu', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-en);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding-bottom: 75px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 520px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        /* Ad Slots Design */
+        .ad-slot {
+            width: 100%;
+            background: rgba(245, 158, 11, 0.05);
+            border: 1px dashed var(--gold);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 6px 0;
+        }
+
+        .bismillah-banner {
+            font-family: var(--font-ar);
+            font-size: 24px;
+            color: var(--gold);
+            direction: rtl;
+        }
+
+        /* Navigation Toolbar */
+        .tool-nav {
+            display: flex;
+            overflow-x: auto;
+            gap: 6px;
+            padding: 4px;
+            background: var(--surface);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            scrollbar-width: none;
+        }
+
+        .tool-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-btn {
+            flex: 0 0 auto;
+            padding: 8px 14px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Base Card */
+        .main-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Panels Switching */
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+            animation: panelFade 0.2s ease-in-out;
+        }
+
+        @keyframes panelFade {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ================= 1. TASBEEH COUNTER UI ================= */
+        .dhikr-title-box {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .ar-display {
+            font-family: var(--font-ar);
+            font-size: 30px;
+            direction: rtl;
+            line-height: 1.4;
+            color: #ffffff;
+        }
+
+        .ur-meaning {
+            font-family: var(--font-ur);
+            font-size: 13px;
+            color: var(--gold);
+            direction: rtl;
+            line-height: 1.8;
+            margin-top: 2px;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 8px;
+            margin-bottom: 18px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .stat-item .val {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Big Round Counter Tap Button */
+        .counter-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at 35% 35%, #183d35, #0a1f1b);
+            border: 6px solid var(--primary);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.06s ease;
+        }
+
+        .counter-circle:active {
+            transform: scale(0.93);
+        }
+
+        .count-number {
+            font-size: 56px;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .count-sub {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+
+        /* Primary Controls: Count, Skip, Reset, Save, Undo */
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 18px;
+        }
+
+        .ctrl-btn {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text-light);
+            padding: 10px 4px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            transition: all 0.15s ease;
+        }
+
+        .ctrl-btn:active {
+            transform: scale(0.96);
+        }
+
+        .ctrl-btn.btn-skip {
+            border-color: rgba(245, 158, 11, 0.5);
+            color: var(--gold);
+        }
+
+        .ctrl-btn.btn-reset {
+            border-color: rgba(239, 68, 68, 0.5);
+            color: var(--danger);
+        }
+
+        .ctrl-btn.btn-save {
+            border-color: rgba(16, 185, 129, 0.5);
+            color: var(--primary);
+        }
+
+        /* About Dhikr / Fadilah Box */
+        .info-box {
+            background: var(--card);
+            border-left: 3px solid var(--gold);
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-top: 15px;
+            font-size: 12px;
+            direction: rtl;
+        }
+
+        .info-box strong {
+            color: var(--gold);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .info-box p {
+            font-family: var(--font-ur);
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* Preset Chips */
+        .chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 14px;
+            justify-content: center;
+        }
+
+        .chip-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text-light);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-family: var(--font-ar);
+            direction: rtl;
+            cursor: pointer;
+        }
+
+        .chip-item.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #ffffff;
+        }
+
+        /* ================= 2. ISLAMIC MONTHS UI ================= */
+        .months-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .month-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            position: relative;
+        }
+
+        .month-card.sacred {
+            border-color: var(--gold);
+        }
+
+        .sacred-tag {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--gold);
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .month-num {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .month-ar {
+            font-family: var(--font-ar);
+            font-size: 20px;
+            color: var(--primary);
+            direction: rtl;
+            margin: 2px 0;
+        }
+
+        .month-ur {
+            font-family: var(--font-ur);
+            font-size: 11px;
+            color: var(--text-light);
+            direction: rtl;
+        }
+
+        .month-note {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            line-height: 1.3;
+        }
+
+        /* ================= 3. ZAKAT CALCULATOR UI ================= */
+        .calc-row {
+            margin-bottom: 12px;
+        }
+
+        .calc-row label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .calc-input {
+            width: 100%;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .calc-input:focus {
+            border-color: var(--primary);
+        }
+
+        .zakat-result-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .zakat-val {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 4px 0;
+        }
+
+        /* ================= 4. RAKAT & SAJDAH COUNTER ================= */
+        .prayer-flex {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .counter-box-p {
+            flex: 1;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .counter-box-p h4 {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .counter-box-p .val {
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        /* ================= 5. AZKAR & 99 NAMES UI ================= */
+        .search-box {
+            width: 100%;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 12px;
+            outline: none;
+        }
+
+        .scrollable-list {
+            max-height: 400px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-right: 2px;
+        }
+
+        .list-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-card .txt-ar {
+            font-family: var(--font-ar);
+            font-size: 18px;
+            direction: rtl;
+        }
+
+        .list-card .txt-ur {
+            font-family: var(--font-ur);
+            font-size: 11px;
+            color: var(--gold);
+            direction: rtl;
+        }
+
+        /* Toast */
+        .toast-popup {
+            position: fixed;
+            bottom: 80px;
+            background: var(--primary);
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.2s ease;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .toast-popup.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Bottom Sticky Ad */
+        .sticky-bottom-ad {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #060e0c;
+            border-top: 1px solid var(--border);
+            padding: 8px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gold);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- Header -->
+        <header>
+            <div class="bismillah-banner">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+            <h2 style="font-size: 18px; font-weight:800; margin-top:2px;">Islamic Smart Suite & Tasbeeh</h2>
+        </header>
+
+        <!-- =================== AD 1: TOP BANNER =================== -->
+        <div class="ad-slot">
+            📢 ADVERTISEMENT (Top 320x50 Banner)
+            <!-- اپنا گوگل ایڈ کوڈ یہاں لگائیں -->
+        </div>
+        <!-- ======================================================= -->
+
+        <!-- Toolbar / Tools Navigation -->
+        <div class="tool-nav">
+            <button class="nav-btn active" onclick="switchTool('tasbeehTool', this)">📿 Tasbeeh</button>
+            <button class="nav-btn" onclick="switchTool('monthsTool', this)">📅 Hijri Months</button>
+            <button class="nav-btn" onclick="switchTool('zakatTool', this)">💰 Zakat Calc</button>
+            <button class="nav-btn" onclick="switchTool('prayerTool', this)">🕌 Rakat/Sajdah</button>
+            <button class="nav-btn" onclick="switchTool('azkarTool', this)">📖 Daily Azkar</button>
+            <button class="nav-btn" onclick="switchTool('namesTool', this)">✨ 99 Names</button>
+            <button class="nav-btn" onclick="switchTool('historyTool', this)">📊 Saved Log</button>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- 1. TASBEEH COUNTER TOOL                                        -->
+        <!-- ============================================================== -->
+        <div id="tasbeehTool" class="tab-panel active">
+            <div class="main-card">
+                
+                <div class="dhikr-title-box">
+                    <div class="ar-display" id="activeAr">سُبْحَانَ اللَّهِ</div>
+                    <div class="ur-meaning" id="activeUr">اللہ ہر عیب اور نقص سے پاک ہے</div>
+                </div>
+
+                <!-- Stats Bar -->
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <div class="label">Target (ہدف)</div>
+                        <div class="val" id="targetVal">33</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="label">Rounds (چکر)</div>
+                        <div class="val" id="roundsVal">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="label">Total Recited</div>
+                        <div class="val" id="totalSessionVal">0</div>
+                    </div>
+                </div>
+
+                <!-- Big Count Tap Circle -->
+                <div class="counter-circle" onclick="tapCount()">
+                    <div class="count-number" id="countVal">0</div>
+                    <div class="count-sub">TAP HERE / کلک کریں</div>
+                </div>
+
+                <!-- Complete Action Buttons: Skip, Reset, Save, Undo, Target, Sound -->
+                <div class="buttons-grid">
+                    <button class="ctrl-btn btn-skip" onclick="skipAction()">
+                        <span>⏭ Skip</span>
+                        <small style="font-size:10px;">اسکپ / اگلا</small>
+                    </button>
+                    <button class="ctrl-btn btn-reset" onclick="resetAction()">
+                        <span>🔄 Reset</span>
+                        <small style="font-size:10px;">ری سیٹ</small>
+                    </button>
+                    <button class="ctrl-btn btn-save" onclick="saveAction()">
+                        <span>💾 Save</span>
+                        <small style="font-size:10px;">سیو کریں</small>
+                    </button>
+                    <button class="ctrl-btn" onclick="undoAction()">
+                        <span>↩ Undo</span>
+                        <small style="font-size:10px;">ایک کم (-1)</small>
+                    </button>
+                    <button class="ctrl-btn" onclick="changeTarget()">
+                        <span>🎯 Target</span>
+                        <small style="font-size:10px;">33/100/∞</small>
+                    </button>
+                    <button class="ctrl-btn" id="soundBtn" onclick="toggleSound()">
+                        <span>🔊 Sound</span>
+                        <small style="font-size:10px;">آن / آف</small>
+                    </button>
+                </div>
+
+                <!-- Fadilah & About this Dhikr -->
+                <div class="info-box">
+                    <strong>📖 اس ذکر کی فضیلت و اہمیت (Virtues & Benefit):</strong>
+                    <p id="fadilahText">رسول اللہ ﷺ نے فرمایا: جو شخص ہر نماز کے بعد 33 بار سبحان اللہ کہے گا، اس کے گناہ معاف کر دیے جاتے ہیں چاہے سمندر کی جھاگ کے برابر ہی کیوں نہ ہوں۔ (صحیح مسلم)</p>
+                </div>
+
+                <!-- Quick Presets -->
+                <div style="font-size: 11px; color: var(--text-muted); text-align:center; margin-top:14px; text-transform:uppercase;">Quick Dhikr Presets / منتخب اذکار</div>
+                <div class="chips-container">
+                    <div class="chip-item active" onclick="loadDhikr(0, this)">سُبْحَانَ اللَّهِ</div>
+                    <div class="chip-item" onclick="loadDhikr(1, this)">اَلْحَمْدُ لِلَّهِ</div>
+                    <div class="chip-item" onclick="loadDhikr(2, this)">اللَّهُ أَكْبَرُ</div>
+                    <div class="chip-item" onclick="loadDhikr(3, this)">أَسْتَغْفِرُ اللَّهَ</div>
+                    <div class="chip-item" onclick="loadDhikr(4, this)">لَا إِلٰهَ إِلَّا اللَّهُ</div>
+                    <div class="chip-item" onclick="loadDhikr(5, this)">درود شریف</div>
+                </div>
+
+            </div>
+
+            <!-- =================== AD 2: MID-CONTENT =================== -->
+            <div class="ad-slot" style="margin-top: 14px;">
+                📢 ADVERTISEMENT (In-Content Banner 300x250)
+                <!-- اپنا ان پیج ایڈ کوڈ یہاں لگائیں -->
+            </div>
+            <!-- ========================================================= -->
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- 2. ISLAMIC HIJRI MONTHS TOOL                                  -->
+        <!-- ============================================================== -->
+        <div id="monthsTool" class="tab-panel">
+            <div class="main-card">
+                <h3 style="font-size: 15px; margin-bottom: 4px; color: var(--gold);">📅 Islamic Hijri Months (اسلامی مہینے)</h3>
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">سال کے 12 ہجری مہینے اور ان کی تفصیلات:</p>
+                
+                <div class="months-grid">
+                    <!-- 1 -->
+                    <div class="month-card sacred">
+                        <span class="sacred-tag">حرمت والا</span>
+                        <div class="month-num">01. Muharram</div>
+                        <div class="month-ar">المُحَرَّم</div>
+                        <div class="month-ur">محرم الحرام</div>
+                        <div class="month-note">سال کا پہلا مقدس مہینہ اور یومِ عاشورہ۔</div>
+                    </div>
+                    <!-- 2 -->
+                    <div class="month-card">
+                        <div class="month-num">02. Safar</div>
+                        <div class="month-ar">صَفَر</div>
+                        <div class="month-ur">صفر المظفر</div>
+                        <div class="month-note">اسلامی سال کا دوسرا مہینہ۔</div>
+                    </div>
+                    <!-- 3 -->
+                    <div class="month-card">
+                        <div class="month-num">03. Rabi al-Awwal</div>
+                        <div class="month-ar">رَبِيع الأَوَّل</div>
+                        <div class="month-ur">ربیع الاول</div>
+                        <div class="month-note">رسول اللہ ﷺ کی ولادتِ باسعادت کا مبارک مہینہ۔</div>
+                    </div>
+                    <!-- 4 -->
+                    <div class="month-card">
+                        <div class="month-num">04. Rabi al-Thani</div>
+                        <div class="month-ar">رَبِيع الثَّانِي</div>
+                        <div class="month-ur">ربیع الثانی</div>
+                        <div class="month-note">ہجری سال کا چوتھا مہینہ۔</div>
+                    </div>
+                    <!-- 5 -->
+                    <div class="month-card">
+                        <div class="month-num">05. Jumada al-Ula</div>
+                        <div class="month-ar">جُمَادَى الأُولَى</div>
+                        <div class="month-ur">جمادی الاولیٰ</div>
+                        <div class="month-note">اسلامی سال کا پانچواں مہینہ۔</div>
+                    </div>
+                    <!-- 6 -->
+                    <div class="month-card">
+                        <div class="month-num">06. Jumada al-Akhirah</div>
+                        <div class="month-ar">جُمَادَى الآخِرَة</div>
+                        <div class="month-ur">جمادی الثانی</div>
+                        <div class="month-note">ہجری سال کا چھٹا مہینہ۔</div>
+                    </div>
+                    <!-- 7 -->
+                    <div class="month-card sacred">
+                        <span class="sacred-tag">حرمت والا</span>
+                        <div class="month-num">07. Rajab</div>
+                        <div class="month-ar">رَجَب</div>
+                        <div class="month-ur">رجب المرجب</div>
+                        <div class="month-note">حرمت والا مہینہ اور واقعہ معراج النبی ﷺ۔</div>
+                    </div>
+                    <!-- 8 -->
+                    <div class="month-card">
+                        <div class="month-num">08. Sha'ban</div>
+                        <div class="month-ar">شَعْبَان</div>
+                        <div class="month-ur">شعبان المعظم</div>
+                        <div class="month-note">رمضان المبارک کی تیاری اور شبِ براءت کا مہینہ۔</div>
+                    </div>
+                    <!-- 9 -->
+                    <div class="month-card sacred" style="border-color: var(--primary);">
+                        <span class="sacred-tag" style="background: rgba(16,185,129,0.2); color:var(--primary);">افضل ترین</span>
+                        <div class="month-num">09. Ramadan</div>
+                        <div class="month-ar">رَمَضَان</div>
+                        <div class="month-ur">رمضان المبارک</div>
+                        <div class="month-note">قرآن پاک کا نزول، روزے اور لیلۃ القدر۔</div>
+                    </div>
+                    <!-- 10 -->
+                    <div class="month-card">
+                        <div class="month-num">10. Shawwal</div>
+                        <div class="month-ar">شَوَّال</div>
+                        <div class="month-ur">شوال المکرم</div>
+                        <div class="month-note">عید الفطر اور چھ نفلی روزوں کا مہینہ۔</div>
+                    </div>
+                    <!-- 11 -->
+                    <div class="month-card sacred">
+                        <span class="sacred-tag">حرمت والا</span>
+                        <div class="month-num">11. Dhu al-Qi'dah</div>
+                        <div class="month-ar">ذُو القَعْدَة</div>
+                        <div class="month-ur">ذی القعدہ</div>
+                        <div class="month-note">حرمت والا مہینہ اور حج کی تیاریاں۔</div>
+                    </div>
+                    <!-- 12 -->
+                    <div class="month-card sacred">
+                        <span class="sacred-tag">حرمت والا</span>
+                        <div class="month-num">12. Dhu al-Hijjah</div>
+                        <div class="month-ar">ذُو الحِجَّة</div>
+                        <div class="month-ur">ذی الحجہ</div>
+                        <div class="month-note">فریضہ حج، یومِ عرفہ اور عید الاضحیٰ۔</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- 3. ZAKAT CALCULATOR TOOL                                      -->
+        <!-- ============================================================== -->
+        <div id="zakatTool" class="tab-panel">
+            <div class="main-card">
+                <h3 style="font-size: 15px; margin-bottom: 4px; color: var(--gold);">💰 Simple Zakat Calculator</h3>
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">اپنی دولت کی مالیت لکھیں، 2.5% خود نکل آئے گی:</p>
+
+                <div class="calc-row">
+                    <label>نقد رقم یا بینک بیلنس (Cash in Bank / Hand):</label>
+                    <input type="number" id="zCash" class="calc-input" placeholder="0" oninput="computeZakat()">
+                </div>
+                <div class="calc-row">
+                    <label>سونے کی مالیت (Gold Value):</label>
+                    <input type="number" id="zGold" class="calc-input" placeholder="0" oninput="computeZakat()">
+                </div>
+                <div class="calc-row">
+                    <label>چاندی یا تجارتی سامان (Silver / Business Goods):</label>
+                    <input type="number" id="zSilver" class="calc-input" placeholder="0" oninput="computeZakat()">
+                </div>
+                <div class="calc-row">
+                    <label>منفی کریں: فوری واجب الادا قرضے (Minus Debts):</label>
+                    <input type="number" id="zDebts" class="calc-input" placeholder="0" oninput="computeZakat()">
+                </div>
+
+                <div class="zakat-result-box">
+                    <div style="font-size: 12px; color: var(--text-muted);">کل واجب الادا زکوٰۃ (2.5% Zakat Payable)</div>
+                    <div class="zakat-val" id="zakatTotalOutput">0.00</div>
+                    <div style="font-size: 11px; color: var(--text-light);">اگر آپ صاحبِ نصاب ہیں تو یہ رقم ادا کرنا فرض ہے۔</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- 4. RAKAT & SAJDAH COUNTER TOOL                                -->
+        <!-- ============================================================== -->
+        <div id="prayerTool" class="tab-panel">
+            <div class="main-card">
+                <h3 style="font-size: 15px; margin-bottom: 4px; color: var(--gold);">🕌 Rakat & Sajdah Counter</h3>
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">تراویح، نفل یا لمبی نمازوں میں بھول جانے سے بچیں:</p>
+
+                <div class="prayer-flex">
+                    <div class="counter-box-p">
+                        <h4>رکعت (Rakat)</h4>
+                        <div class="val" id="rakatCount">0</div>
+                        <button class="ctrl-btn" style="width:100%;" onclick="incrementPrayer('rakat')">+1 Rakat</button>
+                    </div>
+                    <div class="counter-box-p">
+                        <h4>سجدہ (Sajdah)</h4>
+                        <div class="val" id="sajdahCount">0</div>
+                        <button class="ctrl-btn" style="width:100%;" onclick="incrementPrayer('sajdah')">+1 Sajdah</button>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:8px; margin-top:14px;">
+                    <button class="ctrl-btn btn-reset" style="flex:1;" onclick="resetPrayerCounters()">🔄 Reset Prayer Counters</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- 5. DAILY AZKAR TOOL                                           -->
+        <!-- ============================================================== -->
+        <div id="azkarTool" class="tab-panel">
+            <div class="main-card">
+                <h3 style="font-size: 15px; margin-bottom: 12px; color: var(--gold);">📖 Daily Masnoon Azkar (روزانہ کے اذکار)</h3>
+                
+                <div class="scrollable-list">
+                    
+                    <div class="list-card">
+                        <div>
+                            <div class="txt-ar">آيَةُ الْكُرْسِيِّ</div>
+                            <div class="txt-ur">ہر نماز کے بعد تلاوت، حفاظت کا حصار</div>
+                        </div>
+                        <button class="ctrl-btn btn-save" style="padding:6px 12px;" onclick="checkOffDua(this, 1)">Read (0/1)</button>
+                    </div>
+
+                    <div class="list-card">
+                        <div>
+                            <div class="txt-ar">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</div>
+                            <div class="txt-ur">صبح و شام 100 مرتبہ، گناہوں کی بخشش</div>
+                        </div>
+                        <button class="ctrl-btn btn-save" style="padding:6px 12px;" onclick="checkOffDua(this, 100)">Read (0/100)</button>
+                    </div>
+
+                    <div class="list-card">
+                        <div>
+                            <div class="txt-ar">سَيِّدُ الِاسْتِغْفَارِ</div>
+                            <div class="txt-ur">توبہ کی سب سے عظیم اور کامل ترین دعا</div>
+                        </div>
+                        <button class="ctrl-btn btn-save" style="padding:6px 12px;" onclick="checkOffDua(this, 1)">Read (0/1)</button>
+                    </div>
+
+                    <div class="list-card">
+                        <div>
+                            <div class="txt-ar">لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ</div>
+                            <div class="txt-ur">جنت کے خزانوں میں سے ایک خزانہ</div>
+                        </div>
+                        <button class="ctrl-btn btn-save" style="padding:6px 12px;" onclick="checkOffDua(this, 10)">Read (0/10)</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- 6. 99 NAMES OF ALLAH TOOL                                     -->
+        <!-- ============================================================== -->
+        <div id="namesTool" class="tab-panel">
+            <div class="main-card">
+                <input type="text" id="nameSearchInput" class="search-box" placeholder="🔍 تلاش کریں (English, Arabic, اردو)..." oninput="searchNames()">
+                
+                <div class="scrollable-list" id="namesContainer">
+                    <!-- Loaded dynamically via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- 7. HISTORY / SAVED LOGS                                       -->
+        <!-- ============================================================== -->
+        <div id="historyTool" class="tab-panel">
+            <div class="main-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <div>
+                        <h3 style="font-size: 15px; color: var(--gold);">Saved Tasbeeh Records</h3>
+                        <small style="color:var(--text-muted);">Lifetime Count: <strong id="lifetimeVal" style="color:var(--primary);">0</strong></small>
+                    </div>
+                    <button class="ctrl-btn btn-reset" style="padding:6px 10px;" onclick="clearHistoryLog()">Clear All</button>
+                </div>
+
+                <div class="scrollable-list" id="historyList">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Notification Toast Popup -->
+    <div id="toastBox" class="toast-popup">Done!</div>
+
+    <!-- =================== AD 3: STICKY FOOTER =================== -->
+    <div class="sticky-bottom-ad">
+        <span>📢 ADVERTISEMENT (Sticky Mobile 320x50 Banner)</span>
+        <!-- موبائل اسکرین کے نچلے حصے پر ایڈ کا کوڈ یہاں لگائیں -->
+    </div>
+    <!-- ============================================================ -->
+
+    <script>
+        /* ================= 1. CORE DATA & STATE ================= */
+        const dhikrPresets = [
+            {
+                ar: "سُبْحَانَ اللَّهِ",
+                ur: "اللہ ہر عیب اور نقص سے پاک اور بلند ہے",
+                fadilah: "رسول اللہ ﷺ نے فرمایا: جو شخص ہر نماز کے بعد 33 بار سبحان اللہ کہے گا، اس کے گناہ معاف کر دیے جاتے ہیں چاہے سمندر کی جھاگ کے برابر ہی کیوں نہ ہوں۔ (صحیح مسلم)"
+            },
+            {
+                ar: "اَلْحَمْدُ لِلَّهِ",
+                ur: "تمام تعریفیں اور شکر صرف اور صرف اللہ کے لیے ہے",
+                fadilah: "حدیث میں آتا ہے کہ 'الحمد للہ' میزانِ عمل (ترازو) کو نیکیوں سے بھر دیتا ہے۔ (صحیح مسلم)"
+            },
+            {
+                ar: "اللَّهُ أَكْبَرُ",
+                ur: "اللہ سب سے بڑا، سب سے اعلیٰ اور سب پر غالب ہے",
+                fadilah: "اللہ اکبر کہنا زمین و آسمان کے درمیان خلا کو ثواب سے بھر دیتا ہے۔ یہ تسبیح فاطمہ کا اہم حصہ ہے۔"
+            },
+            {
+                ar: "أَسْتَغْفِرُ اللَّهَ",
+                ur: "میں اپنے پروردگار سے اپنے تمام گناہوں کی معافی مانگتا ہوں",
+                fadilah: "نبی کریم ﷺ نے فرمایا: جو شخص استغفار کو لازم پکڑتا ہے، اللہ تعالی اس کے لیے ہر تنگی سے نکلنے کا راستہ بنا دیتا ہے اور ہر پریشانی دور فرما دیتا ہے۔"
+            },
+            {
+                ar: "لَا إِلٰهَ إِلَّا اللَّهُ",
+                ur: "اللہ کے سوا کوئی سچا معبود اور لائقِ عبادت نہیں",
+                fadilah: "رسول اللہ ﷺ نے فرمایا: سب سے افضل ذکر 'لا الہ الا اللہ' ہے، اور جس کا آخری کلام یہ ہوا وہ جنت میں داخل ہو گا۔"
+            },
+            {
+                ar: "اللَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ",
+                ur: "اے اللہ! ہمارے آقا و سردار حضرت محمد ﷺ پر رحمتیں اور سلامتی بھیج",
+                fadilah: "جو مجھ پر ایک بار درود بھیجتا ہے، اللہ تعالیٰ اس پر دس رحمتیں نازل فرماتا ہے، دس گناہ مٹا دیتا ہے اور دس درجات بلند فرماتا ہے۔ (سنن نسائی)"
+            }
+        ];
+
+        let activeIndex = 0;
+        let count = 0;
+        let rounds = 0;
+        let totalRecited = 0;
+        let targets = [33, 100, 1000, 0];
+        let targetIdx = 0;
+        let soundOn = true;
+
+        /* ================= 2. SOUND & FEEDBACK ================= */
+        let webAudio = null;
+        function beepTone() {
+            if (!soundOn) return;
+            try {
+                if (!webAudio) {
+                    webAudio = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (webAudio.state === 'suspended') {
+                    webAudio.resume();
+                }
+                const osc = webAudio.createOscillator();
+                const gain = webAudio.createGain();
+                osc.connect(gain);
+                gain.connect(webAudio.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(650, webAudio.currentTime);
+                gain.gain.setValueAtTime(0.04, webAudio.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, webAudio.currentTime + 0.05);
+                osc.start();
+                osc.stop(webAudio.currentTime + 0.05);
+            } catch (e) {}
+        }
+
+        function triggerVibrate(ms = 30) {
+            if ("vibrate" in navigator) {
+                try { navigator.vibrate(ms); } catch (e) {}
+            }
+        }
+
+        function triggerToast(msg) {
+            const toast = document.getElementById("toastBox");
+            toast.innerText = msg;
+            toast.classList.add("visible");
+            setTimeout(() => toast.classList.remove("visible"), 2000);
+        }
+
+        /* ================= 3. TASBEEH COUNTER LOGIC ================= */
+        function tapCount() {
+            count++;
+            totalRecited++;
+            beepTone();
+            triggerVibrate(35);
+
+            let currentTarget = targets[targetIdx];
+            if (currentTarget > 0 && count >= currentTarget) {
+                rounds++;
+                count = 0;
+                triggerVibrate([80, 50, 80]);
+                triggerToast("Target Completed! مبارک ہو 🎉");
+            }
+
+            updateCounterUI();
+        }
+
+        // اسکیپ بٹن (Skip Button)
+        function skipAction() {
+            // اگلے راؤنڈ یا اگلے ذکر پر بغیر لمبی گنتی کے فوری جائیں
+            rounds++;
+            count = 0;
+            triggerToast("Round Skipped (اگلے دور پر منتقل)");
+            updateCounterUI();
+        }
+
+        // ری سیٹ بٹن (Reset Button)
+        function resetAction() {
+            if (confirm("Reset current counter to 0? (کیا آپ کاؤنٹر ری سیٹ کرنا چاہتے ہیں؟)")) {
+                count = 0;
+                rounds = 0;
+                totalRecited = 0;
+                updateCounterUI();
+                triggerToast("Counter Reset (صفر کر دیا گیا)");
+            }
+        }
+
+        // ایک کم (-1 Undo)
+        function undoAction() {
+            if (count > 0) {
+                count--;
+                if (totalRecited > 0) totalRecited--;
+                updateCounterUI();
+            }
+        }
+
+        // ہدف تبدیل کرنا (Target 33, 100, 1000, Free)
+        function changeTarget() {
+            targetIdx = (targetIdx + 1) % targets.length;
+            const t = targets[targetIdx];
+            document.getElementById("targetVal").innerText = t === 0 ? "∞" : t;
+            triggerToast("Target: " + (t === 0 ? "Unlimited" : t));
+        }
+
+        // ساؤنڈ آن / آف
+        function toggleSound() {
+            soundOn = !soundOn;
+            document.getElementById("soundBtn").innerHTML = soundOn ? '<span>🔊 Sound</span><small style="font-size:10px;">آن ہے</small>' : '<span>🔇 Muted</span><small style="font-size:10px;">بند ہے</small>';
+            triggerToast(soundOn ? "Sound Enabled" : "Sound Muted");
+        }
+
+        // سیو بٹن (Save Record)
+        function saveAction() {
+            const sum = totalRecited > 0 ? totalRecited : count;
+            if (sum === 0) {
+                triggerToast("Please count first! (پہلے کچھ تسبیح پڑھیں)");
+                return;
+            }
+
+            const record = {
+                id: Date.now(),
+                dhikr: dhikrPresets[activeIndex].ar,
+                total: sum,
+                date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }),
+                time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+            };
+
+            let store = [];
+            try {
+                store = JSON.parse(localStorage.getItem('tasbeeh_app_history') || '[]');
+            } catch (e) {}
+
+            store.unshift(record);
+            try {
+                localStorage.setItem('tasbeeh_app_history', JSON.stringify(store));
+            } catch (e) {}
+
+            renderHistory();
+            triggerToast("Record Saved Successfully! محفوظ ہو گیا ✔");
+        }
+
+        // پری سیٹ ذکر لوڈ کرنا اور فضیلت تبدیل کرنا
+        function loadDhikr(index, el) {
+            activeIndex = index;
+            const d = dhikrPresets[index];
+            document.getElementById("activeAr").innerText = d.ar;
+            document.getElementById("activeUr").innerText = d.ur;
+            document.getElementById("fadilahText").innerText = d.fadilah;
+
+            document.querySelectorAll('.chip-item').forEach(c => c.classList.remove('active'));
+            if (el) el.classList.add('active');
+
+            count = 0;
+            updateCounterUI();
+        }
+
+        function updateCounterUI() {
+            document.getElementById("countVal").innerText = count;
+            document.getElementById("roundsVal").innerText = rounds;
+            document.getElementById("totalSessionVal").innerText = totalRecited;
+        }
+
+        /* ================= 4. TAB NAVIGATION ================= */
+        function switchTool(toolId, btn) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+            const panel = document.getElementById(toolId);
+            if (panel) panel.classList.add('active');
+            if (btn) btn.classList.add('active');
+        }
+
+        /* ================= 5. ZAKAT CALCULATOR ================= */
+        function computeZakat() {
+            const cash = parseFloat(document.getElementById("zCash").value) || 0;
+            const gold = parseFloat(document.getElementById("zGold").value) || 0;
+            const silver = parseFloat(document.getElementById("zSilver").value) || 0;
+            const debts = parseFloat(document.getElementById("zDebts").value) || 0;
+
+            const netWealth = (cash + gold + silver) - debts;
+            const zakat = netWealth > 0 ? (netWealth * 0.025) : 0;
+
+            document.getElementById("zakatTotalOutput").innerText = zakat.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        /* ================= 6. RAKAT & SAJDAH COUNTER ================= */
+        let rakatVal = 0;
+        let sajdahVal = 0;
+
+        function incrementPrayer(type) {
+            triggerVibrate(25);
+            beepTone();
+            if (type === 'rakat') {
+                rakatVal++;
+                document.getElementById("rakatCount").innerText = rakatVal;
+            } else {
+                sajdahVal++;
+                document.getElementById("sajdahCount").innerText = sajdahVal;
+            }
+        }
+
+        function resetPrayerCounters() {
+            rakatVal = 0;
+            sajdahVal = 0;
+            document.getElementById("rakatCount").innerText = 0;
+            document.getElementById("sajdahCount").innerText = 0;
+            triggerToast("Prayer counters reset");
+        }
+
+        /* ================= 7. AZKAR CHECKLIST ================= */
+        function checkOffDua(btn, goal) {
+            let cur = parseInt(btn.getAttribute("data-count") || "0") + 1;
+            btn.setAttribute("data-count", cur);
+            triggerVibrate(20);
+            beepTone();
+
+            if (cur >= goal) {
+                btn.innerText = "Completed ✔";
+                btn.style.background = "var(--primary)";
+                btn.style.color = "#fff";
+            } else {
+                btn.innerText = `Read (${cur}/${goal})`;
+            }
+        }
+
+        /* ================= 8. 99 NAMES OF ALLAH ================= */
+        const namesData = [
+            { ar: "الرَّحْمَٰنُ", en: "Ar-Rahman", ur: "نہایت مہربان" },
+            { ar: "الرَّحِيمُ", en: "Ar-Raheem", ur: "بڑا رحم کرنے والا" },
+            { ar: "الْمَلِكُ", en: "Al-Malik", ur: "حقیقی بادشاہ" },
+            { ar: "الْقُدُّوسُ", en: "Al-Quddus", ur: "نہایت پاک ذات" },
+            { ar: "السَّلَامُ", en: "As-Salam", ur: "سلامتی عطا کرنے والا" },
+            { ar: "الْمُؤْمِنُ", en: "Al-Mu'min", ur: "امن دینے والا" },
+            { ar: "الْمُهَيْمِنُ", en: "Al-Muhaymin", ur: "پوری نگہبانی کرنے والا" },
+            { ar: "الْعَزِيزُ", en: "Al-Aziz", ur: "غالب اور زبردست" },
+            { ar: "الْجَبَّارُ", en: "Al-Jabbar", ur: "سب پر غالب، صاحبِ جبروت" },
+            { ar: "الْمُتَكَبِّرُ", en: "Al-Mutakabbir", ur: "بزرگی و بڑائی والا" },
+            { ar: "الْخَالِقُ", en: "Al-Khaliq", ur: "پیدا کرنے والا" },
+            { ar: "الْبَارِئُ", en: "Al-Bari", ur: "ٹھیک ٹھیک بنانے والا" },
+            { ar: "الْمُصَوِّرُ", en: "Al-Musawwir", ur: "صورت گری کرنے والا" },
+            { ar: "الْغَفَّارُ", en: "Al-Ghaffar", ur: "بہت بخشنے والا" },
+            { ar: "الْقَهَّارُ", en: "Al-Qahhar", ur: "زبردست قدرت والا" },
+            { ar: "الْوَهَّابُ", en: "Al-Wahhab", ur: "سب کچھ عطا کرنے والا" },
+            { ar: "الرَّزَّاقُ", en: "Ar-Razzaq", ur: "روزی دینے والا" },
+            { ar: "الْفَتَّاحُ", en: "Al-Fattah", ur: "راستے اور مشکلات کھولنے والا" },
+            { ar: "الْعَلِيمُ", en: "Al-Aleem", ur: "ہر چیز کا علم رکھنے والا" },
+            { ar: "الْبَاسِطُ", en: "Al-Basit", ur: "فراخی دینے والا" }
+        ];
+
+        function populateNames(items) {
+            const box = document.getElementById("namesContainer");
+            if (!items.length) {
+                box.innerHTML = `<div style="text-align:center; padding:15px; color:var(--text-muted);">No name found.</div>`;
+                return;
+            }
+            box.innerHTML = items.map(n => `
+                <div class="list-card">
+                    <div>
+                        <div class="txt-ar">${n.ar}</div>
+                        <div class="txt-ur">${n.en} • ${n.ur}</div>
+                    </div>
+                    <button class="ctrl-btn" style="padding:4px 8px; font-size:11px;" onclick="setCustomNameDhikr('${n.ar}', '${n.ur}')">📿 Count</button>
+                </div>
+            `).join('');
+        }
+
+        function searchNames() {
+            const q = document.getElementById("nameSearchInput").value.toLowerCase();
+            const res = namesData.filter(i => 
+                i.ar.includes(q) || 
+                i.ur.includes(q) || 
+                i.en.toLowerCase().includes(q)
+            );
+            populateNames(res);
+        }
+
+        function setCustomNameDhikr(ar, ur) {
+            document.getElementById("activeAr").innerText = ar;
+            document.getElementById("activeUr").innerText = ur;
+            document.getElementById("fadilahText").innerText = "اللہ تعالیٰ کا مبارک اسمِ گرامی: " + ar;
+            count = 0;
+            updateCounterUI();
+            switchTool('tasbeehTool', document.querySelectorAll('.nav-btn')[0]);
+            triggerToast(`Loaded: ${ar}`);
+        }
+
+        /* ================= 9. HISTORY MANAGEMENT ================= */
+        function renderHistory() {
+            const container = document.getElementById("historyList");
+            let list = [];
+            try {
+                list = JSON.parse(localStorage.getItem('tasbeeh_app_history') || '[]');
+            } catch (e) {}
+
+            const lifetime = list.reduce((total, cur) => total + (cur.total || 0), 0);
+            document.getElementById("lifetimeVal").innerText = lifetime.toLocaleString();
+
+            if (list.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:20px; font-size:12px; color:var(--text-muted);">No saved records yet. Tap 'Save' on Tasbeeh tab.</div>`;
+                return;
+            }
+
+            container.innerHTML = list.map(item => `
+                <div class="list-card">
+                    <div>
+                        <div style="font-family:var(--font-ar); font-size:18px;">${item.dhikr}</div>
+                        <div style="font-size:11px; color:var(--text-muted);">${item.date} at ${item.time}</div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-weight:800; color:var(--primary); font-size:16px;">${item.total}</span>
+                        <button onclick="deleteSingleHistory(${item.id})" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:14px;">✕</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteSingleHistory(id) {
+            let list = [];
+            try {
+                list = JSON.parse(localStorage.getItem('tasbeeh_app_history') || '[]');
+            } catch (e) {}
+
+            list = list.filter(i => i.id !== id);
+            try {
+                localStorage.setItem('tasbeeh_app_history', JSON.stringify(list));
+            } catch (e) {}
+            renderHistory();
+        }
+
+        function clearHistoryLog() {
+            if (confirm("Delete all history logs? (کیا آپ تمام ہسٹری مٹانا چاہتے ہیں؟)")) {
+                try {
+                    localStorage.removeItem('tasbeeh_app_history');
+                } catch (e) {}
+                renderHistory();
+                triggerToast("History cleared!");
+            }
+        }
+
+        /* ================= 10. KEYBOARD SHORTCUTS ================= */
+        window.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT') return;
+            if (e.code === 'Space') {
+                e.preventDefault();
+                tapCount();
+            } else if (e.key === '-' || e.key === 'Backspace') {
+                undoAction();
+            } else if (e.key.toLowerCase() === 'r') {
+                resetAction();
+            } else if (e.key.toLowerCase() === 's') {
+                skipAction();
+            }
+        });
+
+        /* ================= INITIALIZATION ================= */
+        window.addEventListener('DOMContentLoaded', () => {
+            populateNames(namesData);
+            renderHistory();
+            updateCounterUI();
+        });
+    </script>
+</body>
+</html>
